@@ -1,6 +1,9 @@
 #custom
 _reference
 
+# webstorm idea
+.idea
+
 #dependency
 node_modules
 
