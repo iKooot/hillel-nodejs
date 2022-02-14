@@ -4,6 +4,10 @@ _reference
 #dependency
 node_modules
 
+#DS files
+.DS_Store
+*/.DS_Store
+
 # Logs
 logs
 *.log
