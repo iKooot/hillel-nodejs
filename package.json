@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "learn nodejs in hillel",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node index.js",
+    "start:debug": "node --inspect-brk index.js"
+  },
   "author": "iKot",
   "license": "ISC",
   "dependencies": {
