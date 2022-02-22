@@ -1,5 +1,8 @@
-const { info, warn, error } = require("./utils/logger");
+const yargs = require("yargs/yargs");
+const { seek, seekEmitter } = require("./utils/FileSeeker");
 
-info("Hello comrade, this is info color text");
-warn("Hello comrade, this is warn color text");
-error("Hello comrade, this is error color text");
+const argv = yargs(process.argv).argv;
+
+seekEmitter.emit("start", "Started project");
+
+seek(argv.fileName, argv.fileDir);

@@ -4,13 +4,17 @@
   "description": "learn nodejs in hillel",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js --fileName=index.js --fileDir=/",
     "start:debug": "node --inspect-brk index.js"
   },
   "author": "iKot",
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.2",
+    "yargs": "^17.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
     "prettier": "^2.5.1"
   }
 }
