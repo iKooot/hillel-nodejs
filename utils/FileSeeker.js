@@ -1,29 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
-const { info, warn, error } = require("./logger");
 
 const MyEventEmitter = new EventEmitter();
-
-MyEventEmitter.once("start", (payload) => {
-  info(`----- ${payload} -----`);
-});
-
-MyEventEmitter.on("status", (payload) => {
-  const { status, message, path } = payload;
-
-  const alertMessage = `${message}\n-------\nPath: ${path}`;
-
-  if (status === "success") {
-    info(alertMessage);
-  }
-  if (status === "failed") {
-    error(message);
-  }
-  if (status === "searching") {
-    warn(message ?? "searching...");
-  }
-});
 
 const seek = (target, dirPAth = "/") => {
   const dir = path.join(process.env.PWD, dirPAth);
