@@ -1,6 +1,7 @@
 const yargs = require("yargs/yargs");
-const { seek, logger } = require("./utils/FileSeeker");
+const { seek } = require("./utils/fileSeeker");
 const { info, error, warn } = require("./utils/logger");
+const { logger } = require('./utils/writerLoggs')
 
 const argv = yargs(process.argv).argv;
 
