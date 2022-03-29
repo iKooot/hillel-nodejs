@@ -1,56 +1,63 @@
+const fsPromises = require("fs/promises");
 const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
 
-const MyEventEmitter = new EventEmitter();
+const logger = (event, content) => {
+  const dir = path.join(process.env.PWD, "/events.log.txt");
+  const date = new Date();
 
-const seek = (target, dirPAth = "/") => {
-  const dir = path.join(process.env.PWD, dirPAth);
-  let status = "searching";
-
-  MyEventEmitter.emit("status", {
-    status: "searching",
-    message: `started searching in directory:\n${dir}`,
-  });
-
-  const interval = setInterval(() => {
-    if (status === "searching") {
-      MyEventEmitter.emit("status", { status: "searching" });
+  fs.writeFile(
+    dir,
+    `Date: ${date.toUTCString()}\nEvent: ${event}\nContent: ${JSON.stringify(
+      content
+    )}\n`,
+    { flag: "a+" },
+    (error) => {
+      if (error) {
+        console.log(error);
+      }
     }
+  );
+};
 
-    if (status === "success") {
-      MyEventEmitter.emit("status", {
-        status: "success",
-        message: `file ${target} is in the directory`,
-        path: dir,
-      });
-      clearInterval(interval);
-    }
+const seek = (target, dirPath = "/") => {
+  const _emitter = new EventEmitter();
+  const dir = path.join(process.env.PWD, dirPath);
 
-    if (status === "failed") {
-      MyEventEmitter.emit("status", {
-        status: "failed",
-        message: `file ${target} not found`,
-      });
-      clearInterval(interval);
-    }
-  }, 1);
+  fsPromises
+    .access(dir)
+    .then(() => {
+      return fsPromises.readdir(dir);
+    })
+    .then((files) => {
+      if (files.includes(target)) {
+        _emitter.emit("success", {
+          message: `file ${target} is in the directory`,
+          path: dir,
+        });
 
-  fs.readdir(dir, (error, data) => {
-    if (error) throw error;
+        return fsPromises.readFile(target, "utf-8");
+      } else {
+        _emitter.emit(
+          "error",
+          `file ${target} doesn't exist in directory ${dir}`
+        );
 
-    if (data.length) {
-      data.includes(target) ? (status = "success") : (status = "failed");
-    } else {
-      MyEventEmitter.emit("status", {
-        status: "failed",
-        message: "folder is empty",
-      });
-    }
-  });
+        process.exit(1);
+      }
+    })
+    .then((content) => {
+      _emitter.emit("data", content);
+    })
+    .catch((error) => {
+      _emitter.emit("error", error);
+    });
+
+  return _emitter;
 };
 
 module.exports = {
   seek,
-  seekEmitter: MyEventEmitter,
+  logger,
 };
