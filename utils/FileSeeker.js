@@ -4,6 +4,7 @@ const path = require("path");
 const EventEmitter = require("events");
 
 const logger = (event, content) => {
+  //TODO move this in separate file
   const dir = path.join(process.env.PWD, "/events.log.txt");
   const date = new Date();
 
