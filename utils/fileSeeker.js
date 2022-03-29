@@ -1,25 +1,6 @@
 const fsPromises = require("fs/promises");
-const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
-
-const logger = (event, content) => {
-  const dir = path.join(process.env.PWD, "/events.log.txt");
-  const date = new Date();
-
-  fs.writeFile(
-    dir,
-    `Date: ${date.toUTCString()}\nEvent: ${event}\nContent: ${JSON.stringify(
-      content
-    )}\n`,
-    { flag: "a+" },
-    (error) => {
-      if (error) {
-        console.log(error);
-      }
-    }
-  );
-};
 
 const seek = (target, dirPath = "/") => {
   const _emitter = new EventEmitter();
@@ -59,5 +40,4 @@ const seek = (target, dirPath = "/") => {
 
 module.exports = {
   seek,
-  logger,
 };
