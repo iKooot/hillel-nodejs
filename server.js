@@ -1,24 +1,16 @@
-const http = require("http");
-const fs = require("fs");
-const { logger } = require("./utils/writerLoggs");
+const express = require("express");
+const routes = require("./routes");
 
-const HOST_NAME = "localhost";
-const PORT = 3003;
+const HOST_NAME = process.env.HOST_NAME ?? "localhost";
+const PORT = process.env.PORT ?? 3003;
 
-const server = http.createServer();
+const app = express();
 
-server.addListener("request", (req, res) => {
-  if (req.url === "/") {
-    fs.createReadStream("./index.html").pipe(res);
-    logger(req.url);
-  } else if (req.url === "/favicon.ico") {
-    fs.createReadStream("./assets/icon.jpg").pipe(res);
-    logger(req.url);
-  } else {
-    res.destroy();
-  }
-});
+app.use("/", routes.home);
+app.use("/catalog", routes.catalog);
+app.use("/assets", routes.assets)
 
-server.listen(PORT, HOST_NAME, () => {
+
+app.listen(PORT, HOST_NAME, () => {
   console.log(`Server is servering on http://${HOST_NAME}:${PORT}`);
 });
