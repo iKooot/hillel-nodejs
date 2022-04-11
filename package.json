@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js --fileName=index.js --fileDir=/ --verbose",
-    "start:dev": "nodemon --inspect server.js",
+    "start:dev": "nodemon --inspect server.js -e ejs,js,css,html,jpg,png,scss",
     "start:debug": "node --inspect-brk index.js"
   },
   "author": "iKot",
@@ -13,8 +13,10 @@
   "dependencies": {
     "body-parser": "^1.20.0",
     "chalk": "^4.1.2",
+    "connect-livereload": "^0.6.1",
     "express": "^4.17.3",
     "http-status-codes": "^2.2.0",
+    "livereload": "^0.9.3",
     "path-to-regexp": "^6.2.0",
     "query-string": "^7.1.1",
     "yargs": "^17.3.1"
