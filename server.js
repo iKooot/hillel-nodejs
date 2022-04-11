@@ -1,10 +1,13 @@
 const express = require("express");
 const routes = require("./routes");
+const bodyParser = require('body-parser')
 
 const HOST_NAME = process.env.HOST_NAME ?? "localhost";
-const PORT = process.env.PORT ?? 3003;
+const PORT = process.env.PORT ?? 3004;
 
 const app = express();
+
+app.use(bodyParser());
 
 app.use("/", routes.home);
 app.use("/catalog", routes.catalog);

@@ -1,25 +1,51 @@
 const path = require("path");
 const fs = require("fs");
 
-const todoWriter = (data) => {
+const todoReader = async () => {
+  const dir = path.join(process.env.PWD, "/todos.json");
+
+  const file$ = fs.createReadStream(dir, { encoding: "utf-8" })
+
+  const data = await new Promise( (res, rej) => {
+    let result = ''
+
+    file$.on("data", chunk => {
+      result += chunk
+    })
+
+    file$.on('end', () => {
+      res(result);
+    });
+
+    file$.on('error', rej);
+  })
+
+  return JSON.parse(data)
+}
+
+const todoWriter = async (data) => {
   const dir = path.join(process.env.PWD, "/todos.json");
   const date = new Date();
+  let template = null;
 
-  const baseTemplate = { todos: [] };
+  try {
+    fs.accessSync(dir)
+    template = await todoReader()
 
-  if (data) {
-    baseTemplate.todos.push(`[${date.toISOString()}]: ${data}`)
+    if (data) {
+      template.push(`[${date.toISOString()}]: ${data}`)
+    }
+
+  } catch {
+    template = []
   }
 
   const writeStream = fs.createWriteStream(dir);
 
-  writeStream.on("ready", (chunk) => {
-    console.log(chunk)
-  })
-
-  writeStream.end(JSON.stringify(baseTemplate));
+  writeStream.end(JSON.stringify(template));
 };
 
 module.exports = {
   todoWriter,
+  todoReader
 };
