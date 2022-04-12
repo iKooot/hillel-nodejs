@@ -1,6 +1,0 @@
-Date: Fri, 25 Mar 2022 17:28:44 GMT
-Event: success
-Content: {"message":"file index.js is in the directory","path":"/Users/ssavchuk/Documents/my-projects/hillel-nodejs/"}
-Date: Fri, 25 Mar 2022 17:28:44 GMT
-Event: data
-Content: "const yargs = require(\"yargs/yargs\");\nconst { seek, logger } = require(\"./utils/FileSeeker\");\nconst { info, error, warn } = require(\"./utils/logger\");\n\nconst argv = yargs(process.argv).argv;\n\nseek(argv.fileName, argv.fileDir)\n  .on(\"success\", (payload) => {\n    const { message, path } = payload;\n\n    const alertMessage = `${message}\\n-------\\nPath: ${path}`;\n\n    info(alertMessage);\n\n    if (argv.verbose) {\n      logger( 'success', payload)\n    }\n  })\n  .on(\"data\", (payload) => {\n    warn(`\\n------- Content of file -------\\n`);\n    warn(payload);\n\n    if (argv.verbose) {\n      logger( 'data', payload)\n    }\n  })\n  .on(\"error\", (payload) => {\n    error(payload);\n\n    if (argv.verbose) {\n      logger( 'error', payload)\n    }\n  });\n"
